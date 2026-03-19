@@ -1,45 +1,27 @@
-const User = require("../models/user");
-const becrypt = require("bcryptjs");
-const GenerateToken = require("../utils/generateToken");
+const authService = require("../services/auth.service");
 
 // Register User
 const RegisterUser = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
-    if (!username) {
-      return res.status(400).json({ message: "Username is required" });
-    }
-    if (!email) {
-      return res.status(400).json({ message: "Email is required" });
-    }
-    if (!password) {
-      return res.status(400).json({ message: "Password is required" });
-    }
+    const result = await authService.registerUser(username, email, password);
 
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
-    }
-
-    const salt = await becrypt.genSalt(10);
-
-    const hashedPassword = await becrypt.hash(password, salt);
-
-    const user = await User.create({
-      username: username,
-      email: email,
-      password: hashedPassword,
-    });
     return res.status(201).json({
       message: "User created successfully",
-      id: user._id,
-      username: user.username,
-      email: user.email,
-      token: GenerateToken(user._id),
+      data: result,
     });
   } catch (error) {
     console.error(error);
+
+    // Handle specific validation errors
+    if (
+      error.message.includes("required") ||
+      error.message.includes("already exists")
+    ) {
+      return res.status(400).json({ message: error.message });
+    }
+
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -48,32 +30,24 @@ const RegisterUser = async (req, res) => {
 const LoginUser = async (req, res) => {
   try {
     const { username, email, password } = req.body;
-    if (!email && !username) {
-      return res.status(400).json({ message: "Email or username is required" });
-    }
-    if (!password) {
-      return res.status(400).json({ message: "Password is required" });
-    }
 
-    const user =
-      (await User.findOne({ email })) || (await User.findOne({ username }));
-    if (!user) {
-      return res.status(400).json({ message: "Invalid credentials" });
-    }
+    const result = await authService.loginUser(email, username, password);
 
-    const matchedPassword = await becrypt.compare(password, user.password);
-    if (!matchedPassword) {
-      return res.status(400).json({ message: "Invalid credentials" });
-    }
-
-    return res.status(201).json({
+    return res.status(200).json({
       message: "User logged in successfully",
-      id: user._id,
-      username: user.username,
-      token: GenerateToken(user._id),
+      data: result,
     });
   } catch (error) {
     console.error(error);
+
+    // Handle specific validation errors
+    if (
+      error.message.includes("required") ||
+      error.message.includes("Invalid credentials")
+    ) {
+      return res.status(400).json({ message: error.message });
+    }
+
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };

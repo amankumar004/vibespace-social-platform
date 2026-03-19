@@ -1,0 +1,72 @@
+// auth.service.js
+const User = require("../models/user");
+const bcrypt = require("bcryptjs");
+const GenerateToken = require("../utils/generateToken");
+
+exports.registerUser = async (username, email, password) => {
+  // Validate required fields
+  if (!username) {
+    throw new Error("Username is required");
+  }
+  if (!email) {
+    throw new Error("Email is required");
+  }
+  if (!password) {
+    throw new Error("Password is required");
+  }
+
+  // Check if user already exists
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    throw new Error("User already exists with this email");
+  }
+
+  // Hash password
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  // Create user
+  const user = await User.create({
+    username: username.trim(),
+    email: email.trim(),
+    password: hashedPassword,
+  });
+
+  return {
+    id: user._id,
+    username: user.username,
+    email: user.email,
+    token: GenerateToken(user._id),
+  };
+};
+
+exports.loginUser = async (email, username, password) => {
+  // Validate required fields
+  if (!email && !username) {
+    throw new Error("Email or username is required");
+  }
+  if (!password) {
+    throw new Error("Password is required");
+  }
+
+  // Find user by email or username
+  const user =
+    (await User.findOne({ email })) || (await User.findOne({ username }));
+
+  if (!user) {
+    throw new Error("Invalid credentials");
+  }
+
+  // Compare passwords
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) {
+    throw new Error("Invalid credentials");
+  }
+
+  return {
+    id: user._id,
+    username: user.username,
+    email: user.email,
+    token: GenerateToken(user._id),
+  };
+};

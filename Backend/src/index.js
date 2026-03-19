@@ -4,6 +4,7 @@ require("dotenv").config();
 const connectDB = require("./config/db");
 const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
+const postRoute = require("./routes/postRoute");
 
 // Connect to MongoDB
 connectDB();
@@ -18,6 +19,7 @@ const PORT = process.env.PORT || 3000;
 // Routes
 app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
+app.use("/api/posts", postRoute);
 
 // Test route
 app.get("/", (req, res) => {

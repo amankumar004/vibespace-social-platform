@@ -1,4 +1,6 @@
 const commentService = require("../services/comment.service");
+const Notifications = require("../models/notifications");
+const Post = require("../models/post");
 
 // Post a comment
 const postComment = async (req, res) => {
@@ -7,6 +9,19 @@ const postComment = async (req, res) => {
     const { content } = req.body;
     const userId = req.user._id;
     const result = await commentService.postComment(postId, userId, content);
+
+    if (result) {
+      // Notify the post owner about new comment
+      const post = await Post.findById(postId);
+      if (post && post.userId.toString() !== userId.toString()) {
+        await Notifications.create({
+          userId: post.userId,
+          type: "comment",
+          fromUserId: userId,
+          postId: postId,
+        });
+      }
+    }
 
     return res.status(201).json({
       success: true,

@@ -1,4 +1,5 @@
 // user.service.js
+const Notifications = require("../models/notifications");
 const User = require("../models/user");
 
 exports.getUserProfile = async (userId) => {

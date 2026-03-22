@@ -1,4 +1,6 @@
 const postService = require("../services/post.service");
+const Notifications = require("../models/notifications");
+const Post = require("../models/post");
 
 // Create a new post
 const createPost = async (req, res) => {
@@ -147,7 +149,22 @@ const deletePost = async (req, res) => {
 // Like post
 const likePost = async (req, res) => {
   try {
-    const result = await postService.likePost(req.params.id, req.user._id);
+    const postId = req.params.id;
+    const userId = req.user._id;
+    const result = await postService.likePost(postId, userId);
+
+    if (result) {
+      // Get post to notify the post owner about new like
+      const post = await Post.findById(postId);
+      if (post && post.userId.toString() !== userId.toString()) {
+        await Notifications.create({
+          userId: post.userId,
+          fromUserId: userId,
+          type: "like",
+          postId: postId,
+        });
+      }
+    }
 
     return res.status(200).json({
       success: true,

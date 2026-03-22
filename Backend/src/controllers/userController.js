@@ -1,3 +1,4 @@
+const Notifications = require("../models/notifications");
 const userService = require("../services/user.service");
 
 const getUserProfile = async (req, res) => {
@@ -52,7 +53,16 @@ const updateUserProfile = async (req, res) => {
 
 const followUser = async (req, res) => {
   try {
-    const result = await userService.followUser(req.user._id, req.params.id);
+    const targetUserId = req.params.id;
+    const currentUserId = req.user._id;
+    const result = await userService.followUser(currentUserId, targetUserId);
+
+    // Notify the target user about new follower
+    await Notifications.create({
+      userId: targetUserId,
+      fromUserId: currentUserId,
+      type: "follow",
+    });
 
     res.status(200).json({
       success: true,

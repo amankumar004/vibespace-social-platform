@@ -6,6 +6,7 @@ const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
 const postRoute = require("./routes/postRoute");
 const commentRoute = require("./routes/commentRoute");
+const notificationRoute = require("./routes/notificationRoute");
 
 // Connect to MongoDB
 connectDB();
@@ -22,6 +23,7 @@ app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
 app.use("/api/posts", postRoute);
 app.use("/api/comments", commentRoute);
+app.use("/api/notifications", notificationRoute);
 
 // Test route
 app.get("/", (req, res) => {

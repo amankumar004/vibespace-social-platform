@@ -9,6 +9,7 @@ const {
   deletePost,
   likePost,
   unlikePost,
+  getFeed,
 } = require("../controllers/postController");
 const { protect } = require("../middlewares/authMiddleware");
 
@@ -25,5 +26,8 @@ router.delete("/:id", protect, deletePost); // Delete post
 // Post interactions
 router.post("/like/:id", protect, likePost); // Like post
 router.post("/unlike/:id", protect, unlikePost); // Unlike post
+
+// Feed
+router.get("/feed", protect, getFeed);
 
 module.exports = router;

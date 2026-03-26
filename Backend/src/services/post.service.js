@@ -1,4 +1,19 @@
 const Post = require("../models/post");
+const User = require("../models/user");
+
+exports.getFeed = async (userId, page, limit) => {
+  const user = await User.findById(userId);
+
+  const posts = await Post.find({
+    userId: { $in: user.following },
+  })
+    .populate("userId", "username, avatar")
+    .sort({ createdAt: -1 })
+    .skip((page - 1) * limit)
+    .limit(limit);
+
+  return posts;
+};
 
 exports.createPost = async (userId, type, content, mediaUrl, mood) => {
   // Validate post type and content

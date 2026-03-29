@@ -34,3 +34,12 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running at ${PORT}`);
 });
+
+// Global error handler - return JSON for errors (helps API clients)
+app.use((err, req, res, next) => {
+  console.error(err);
+  const status = err.status || 500;
+  // If err is an Error instance, use its message; otherwise stringify
+  const message = err && err.message ? err.message : JSON.stringify(err);
+  res.status(status).json({ success: false, message });
+});

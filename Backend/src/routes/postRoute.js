@@ -12,9 +12,10 @@ const {
   getFeed,
 } = require("../controllers/postController");
 const { protect } = require("../middlewares/authMiddleware");
+const upload = require("../middlewares/uploadMiddleware");
 
 // Post creation and retrieval
-router.post("/", protect, createPost); // Create post
+router.post("/", protect, upload.single("image"), createPost); // Create post
 router.get("/", getAllPosts); // Get all posts (public feed)
 router.get("/user/:userId", getUserPosts); // Get user's posts
 router.get("/:id", getPostById); // Get post by ID

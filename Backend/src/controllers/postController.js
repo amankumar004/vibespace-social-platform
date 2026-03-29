@@ -27,7 +27,21 @@ const getFeed = async (req, res) => {
 // Create a new post
 const createPost = async (req, res) => {
   try {
-    const { type, content, mediaUrl, mood } = req.body;
+    const { type, content, mood } = req.body;
+    console.log("req ", req.body);
+    console.log("req.file ", req.file);
+
+    let mediaUrl = null;
+
+    if (type === "image") {
+      // multer-storage-cloudinary may set the uploaded file URL in
+      // `req.file.path`, `req.file.secure_url` or `req.file.url` depending on versions.
+      const fileUrl = req.file && (req.file.path || req.file.secure_url || req.file.url);
+      if (!fileUrl) {
+        return res.status(400).json({ message: "Media URL is required for image posts" });
+      }
+      mediaUrl = fileUrl;
+    }
 
     const newPost = await postService.createPost(
       req.user._id,

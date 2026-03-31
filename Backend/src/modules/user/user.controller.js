@@ -1,5 +1,5 @@
-const Notifications = require("../models/notifications");
-const userService = require("../services/user.service");
+const Notifications = require("../notification/notification.model");
+const userService = require("./user.service");
 
 const getUserProfile = async (req, res) => {
   try {

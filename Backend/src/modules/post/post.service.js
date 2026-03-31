@@ -1,5 +1,5 @@
-const Post = require("../models/post");
-const User = require("../models/user");
+const Post = require("./post.model");
+const User = require("../user/user.model");
 
 exports.getFeed = async (userId, page, limit) => {
   const user = await User.findById(userId);

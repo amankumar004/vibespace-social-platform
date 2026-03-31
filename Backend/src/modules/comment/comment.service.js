@@ -1,5 +1,5 @@
-const Comment = require("../models/comments");
-const Post = require("../models/post");
+const Comment = require("./comment.model");
+const Post = require("../post/post.model");
 
 exports.postComment = async (postId, userId, content) => {
   if (!content || content.trim() === "") {

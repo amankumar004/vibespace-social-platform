@@ -1,6 +1,6 @@
-const commentService = require("../services/comment.service");
-const Notifications = require("../models/notifications");
-const Post = require("../models/post");
+const commentService = require("./comment.service");
+const Notifications = require("../notification/notification.model");
+const Post = require("../post/post.model");
 
 // Post a comment
 const postComment = async (req, res) => {

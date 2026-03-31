@@ -1,7 +1,7 @@
 // auth.service.js
-const User = require("../models/user");
+const User = require("../user/user.model");
 const bcrypt = require("bcryptjs");
-const GenerateToken = require("../utils/generateToken");
+const GenerateToken = require("../../common/utils/generateToken");
 
 exports.registerUser = async (username, email, password) => {
   // Validate required fields

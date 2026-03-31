@@ -5,8 +5,8 @@ const {
   updateUserProfile,
   followUser,
   unfollowUser,
-} = require("../controllers/userController");
-const { protect } = require("../middlewares/authMiddleware");
+} = require("./user.controller");
+const { protect } = require("../../common/middlewares/authMiddleware");
 
 router.get("/me", protect, getUserProfile);
 router.put("/me", protect, updateUserProfile);

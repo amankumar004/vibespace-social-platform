@@ -10,9 +10,9 @@ const {
   likePost,
   unlikePost,
   getFeed,
-} = require("../controllers/postController");
-const { protect } = require("../middlewares/authMiddleware");
-const upload = require("../middlewares/uploadMiddleware");
+} = require("./post.controller");
+const { protect } = require("../../common/middlewares/authMiddleware");
+const upload = require("../../common/middlewares/uploadMiddleware");
 
 // Post creation and retrieval
 router.post("/", protect, upload.single("image"), createPost); // Create post

@@ -1,6 +1,6 @@
 // user.service.js
-const Notifications = require("../models/notifications");
-const User = require("../models/user");
+const Notifications = require("../notification/notification.model");
+const User = require("./user.model");
 
 exports.getUserProfile = async (userId) => {
   const user = await User.findById(userId)

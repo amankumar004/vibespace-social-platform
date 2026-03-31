@@ -1,6 +1,6 @@
-const postService = require("../services/post.service");
-const Notifications = require("../models/notifications");
-const Post = require("../models/post");
+const postService = require("./post.service");
+const Notifications = require("../notification/notification.model");
+const Post = require("./post.model");
 
 // Create a Feed with pagination
 // TODO: create optimized feed using Cursor like used in instagram and Suggested Posts feature also

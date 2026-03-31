@@ -2,11 +2,11 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 const connectDB = require("./config/db");
-const authRoute = require("./routes/authRoute");
-const userRoute = require("./routes/userRoute");
-const postRoute = require("./routes/postRoute");
-const commentRoute = require("./routes/commentRoute");
-const notificationRoute = require("./routes/notificationRoute");
+const authRoute = require("./modules/auth/auth.route");
+const userRoute = require("./modules/user/user.route");
+const postRoute = require("./modules/post/post.route");
+const commentRoute = require("./modules/comment/comment.route");
+const notificationRoute = require("./modules/notification/notification.route");
 
 // Connect to MongoDB
 connectDB();

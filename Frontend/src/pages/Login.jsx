@@ -11,6 +11,29 @@ const Login = () => {
   const navigate = useNavigate();
   const setAuth = useAuthStore((s) => s.setAuth);
 
+  const handleLogin = async () => {
+    try {
+      setLoading(true);
+      const data = await loginUser({
+        email: form.email,
+        password: form.password,
+      });
+      // data = { id, username, email, token }
+      if (data && data.token) {
+        setAuth({
+          token: data.token,
+          user: { id: data.id, username: data.username, email: data.email },
+        });
+        navigate("/home");
+      }
+    } catch (err) {
+      console.error(err);
+      alert(err?.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#050505] p-4 font-sans">
       {/* Main Outer Container */}
@@ -86,28 +109,7 @@ const Login = () => {
 
               <Button
                 text={loading ? "Logging in..." : "Login"}
-                onClick={async () => {
-                  try {
-                    setLoading(true);
-                    const data = await loginUser({
-                      email: form.email,
-                      password: form.password,
-                    });
-                    // data = { id, username, email, token }
-                    if (data && data.token) {
-                      setAuth({
-                        token: data.token,
-                        user: { id: data.id, username: data.username, email: data.email },
-                      });
-                      navigate("/home");
-                    }
-                  } catch (err) {
-                    console.error(err);
-                    alert(err?.response?.data?.message || "Login failed");
-                  } finally {
-                    setLoading(false);
-                  }
-                }}
+                onClick={handleLogin}
               />
 
               <p className="text-gray-500 text-sm text-center">

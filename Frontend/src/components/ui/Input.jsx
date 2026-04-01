@@ -5,9 +5,13 @@ const Input = ({ type = "text", placeholder, value, onChange }) => {
       placeholder={placeholder}
       value={value}
       onChange={onChange}
-      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 
-      focus:border-purple-500 focus:ring-2 focus:ring-purple-500 outline-none 
-      text-white placeholder-gray-400 transition"
+      className="
+        relative w-full px-5 py-3 rounded-xl
+        bg-[#1a1a1a]/80 border border-white/5
+        text-white placeholder-gray-600
+        focus:outline-none focus:border-purple-500/50
+        transition-all duration-300
+      "
     />
   );
 };

@@ -1,10 +1,15 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
+import { login as loginService } from "../services/auth.service";
+import useAuthStore from "../store/authStore";
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const setAuth = useAuthStore((s) => s.setAuth);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#050505] p-4 font-sans">
@@ -80,8 +85,26 @@ const Login = () => {
               </div>
 
               <Button
-                text="Login"
-                onClick={() => console.log("Logging in...")}
+                text={loading ? "Logging in..." : "Login"}
+                onClick={async () => {
+                  try {
+                    setLoading(true);
+                    const data = await loginService({
+                      email: form.email,
+                      password: form.password,
+                    });
+                    // backend should return { token, user }
+                    if (data && data.token) {
+                      setAuth(data);
+                      navigate("/home");
+                    }
+                  } catch (err) {
+                    console.error(err);
+                    alert(err?.response?.data?.message || "Login failed");
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
               />
 
               <p className="text-gray-500 text-sm text-center">

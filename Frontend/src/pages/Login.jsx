@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
-import { login as loginService } from "../services/auth.service";
+import { loginUser } from "../services/authService";
 import useAuthStore from "../store/authStore";
 
 const Login = () => {
@@ -89,13 +89,16 @@ const Login = () => {
                 onClick={async () => {
                   try {
                     setLoading(true);
-                    const data = await loginService({
+                    const data = await loginUser({
                       email: form.email,
                       password: form.password,
                     });
-                    // backend should return { token, user }
+                    // data = { id, username, email, token }
                     if (data && data.token) {
-                      setAuth(data);
+                      setAuth({
+                        token: data.token,
+                        user: { id: data.id, username: data.username, email: data.email },
+                      });
                       navigate("/home");
                     }
                   } catch (err) {

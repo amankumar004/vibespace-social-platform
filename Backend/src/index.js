@@ -13,8 +13,15 @@ connectDB();
 
 // Initialize Express app
 const app = express();
-app.use(cors());
 app.use(express.json());
+// CORS: allow only the frontend origin and enable credentials for cookies/auth
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
+app.use(
+  cors({
+    origin: FRONTEND_URL,
+    credentials: true,
+  }),
+);
 
 const PORT = process.env.PORT || 3000;
 

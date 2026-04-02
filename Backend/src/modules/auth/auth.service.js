@@ -40,9 +40,9 @@ exports.registerUser = async (username, email, password) => {
   };
 };
 
-exports.loginUser = async (email, username, password) => {
+exports.loginUser = async (identifier, password) => {
   // Validate required fields
-  if (!email && !username) {
+  if (!identifier) {
     throw new Error("Email or username is required");
   }
   if (!password) {
@@ -50,8 +50,9 @@ exports.loginUser = async (email, username, password) => {
   }
 
   // Find user by email or username
-  const user =
-    (await User.findOne({ email })) || (await User.findOne({ username }));
+  const user = identifier.includes("@")
+    ? await User.findOne({ email: identifier })
+    : await User.findOne({ username: identifier });
 
   if (!user) {
     throw new Error("Invalid credentials");

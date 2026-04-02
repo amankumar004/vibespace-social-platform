@@ -1,8 +1,8 @@
 import API from "../api/client";
 
-// Login - sends email & password to backend
-export const loginUser = async ({ email, password }) => {
-  const res = await API.post("/auth/login", { email, password });
+// Login - sends email/username & password to backend
+export const loginUser = async ({ identifier, password }) => {
+  const res = await API.post("/auth/login", { identifier, password });
   // Backend returns: { message, data: { id, username, email, token } }
   return res.data.data;
 };

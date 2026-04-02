@@ -6,7 +6,7 @@ import { loginUser } from "../services/authService";
 import useAuthStore from "../store/authStore";
 
 const Login = () => {
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({ identifier: "", password: "" });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const setAuth = useAuthStore((s) => s.setAuth);
@@ -15,7 +15,7 @@ const Login = () => {
     try {
       setLoading(true);
       const data = await loginUser({
-        email: form.email,
+        identifier: form.identifier,
         password: form.password,
       });
       // data = { id, username, email, token }
@@ -75,12 +75,12 @@ const Login = () => {
             <div className="space-y-6">
               <div>
                 <label className="block text-gray-400 text-sm mb-2 ml-1">
-                  Email
+                  Email or Username
                 </label>
                 <Input
-                  placeholder="Email/Username"
-                  value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  placeholder="Email or Username"
+                  value={form.identifier}
+                  onChange={(e) => setForm({ ...form, identifier: e.target.value })}
                 />
               </div>
 

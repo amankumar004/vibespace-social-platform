@@ -7,8 +7,6 @@ const {
   getAllPosts,
   updatePost,
   deletePost,
-  likePost,
-  unlikePost,
   getFeed,
 } = require("./post.controller");
 const { protect } = require("../../common/middlewares/authMiddleware");
@@ -23,10 +21,6 @@ router.get("/:id", getPostById); // Get post by ID
 // Post modification
 router.put("/:id", protect, updatePost); // Update post
 router.delete("/:id", protect, deletePost); // Delete post
-
-// Post interactions
-router.post("/like/:id", protect, likePost); // Like post
-router.post("/unlike/:id", protect, unlikePost); // Unlike post
 
 // Feed
 router.get("/feed", protect, getFeed);

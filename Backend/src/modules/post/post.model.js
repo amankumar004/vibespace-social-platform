@@ -31,12 +31,10 @@ const postSchema = new mongoose.Schema(
       default: "thoughtful",
     },
 
-    likes: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
+    likesCount: {
+      type: Number,
+      default: 0,
+    },
 
     commentsCount: {
       type: Number,

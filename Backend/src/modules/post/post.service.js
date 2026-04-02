@@ -39,8 +39,7 @@ exports.createPost = async (userId, type, content, mediaUrl, mood) => {
 
 exports.getPostById = async (postId) => {
   const post = await Post.findById(postId)
-    .populate("userId", "username avatar email")
-    .populate("likes", "username avatar");
+    .populate("userId", "username avatar email");
 
   if (!post) {
     throw new Error("Post not found");
@@ -52,8 +51,7 @@ exports.getPostById = async (postId) => {
 exports.getUserPosts = async (userId) => {
   const posts = await Post.find({ userId })
     .sort({ createdAt: -1 })
-    .populate("userId", "username avatar email")
-    .populate("likes", "username avatar");
+    .populate("userId", "username avatar email");
 
   return posts;
 };
@@ -67,8 +65,7 @@ exports.getAllPosts = async (filters = {}) => {
 
   const posts = await Post.find(query)
     .sort({ createdAt: -1 })
-    .populate("userId", "username avatar email")
-    .populate("likes", "username avatar");
+    .populate("userId", "username avatar email");
 
   return posts;
 };
@@ -113,44 +110,3 @@ exports.deletePost = async (postId, userId) => {
   return { message: "Post deleted successfully" };
 };
 
-exports.likePost = async (postId, userId) => {
-  const post = await Post.findById(postId);
-
-  if (!post) {
-    throw new Error("Post not found");
-  }
-
-  // Check if already liked
-  if (post.likes.includes(userId)) {
-    throw new Error("You have already liked this post");
-  }
-
-  post.likes.push(userId);
-  await post.save();
-
-  return {
-    message: "Post liked successfully",
-    likesCount: post.likes.length,
-  };
-};
-
-exports.unlikePost = async (postId, userId) => {
-  const post = await Post.findById(postId);
-
-  if (!post) {
-    throw new Error("Post not found");
-  }
-
-  // Check if post is liked
-  if (!post.likes.includes(userId)) {
-    throw new Error("You have not liked this post");
-  }
-
-  post.likes = post.likes.filter((id) => id.toString() !== userId.toString());
-  await post.save();
-
-  return {
-    message: "Post unliked successfully",
-    likesCount: post.likes.length,
-  };
-};

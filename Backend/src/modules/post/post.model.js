@@ -27,8 +27,7 @@ const postSchema = new mongoose.Schema(
 
     mood: {
       type: String,
-      enum: ["happy", "sad", "productive", "thoughtful", "excited"],
-      default: "thoughtful",
+      default: null,
     },
 
     likesCount: {

@@ -16,13 +16,14 @@ const upload = require("../../common/middlewares/uploadMiddleware");
 router.post("/", protect, upload.single("image"), createPost); // Create post
 router.get("/", getAllPosts); // Get all posts (public feed)
 router.get("/user/:userId", getUserPosts); // Get user's posts
+
+// Feed
+router.get("/feed", protect, getFeed);
+
 router.get("/:id", getPostById); // Get post by ID
 
 // Post modification
 router.put("/:id", protect, updatePost); // Update post
 router.delete("/:id", protect, deletePost); // Delete post
-
-// Feed
-router.get("/feed", protect, getFeed);
 
 module.exports = router;

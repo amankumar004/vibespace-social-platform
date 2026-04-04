@@ -8,6 +8,7 @@ const postRoute = require("./modules/post/post.route");
 const commentRoute = require("./modules/comment/comment.route");
 const notificationRoute = require("./modules/notification/notification.route");
 const likeRoute = require("./modules/like/like.route");
+const feedRoute = require("./modules/feed/feed.route");
 
 // Connect to MongoDB
 connectDB();
@@ -33,6 +34,7 @@ app.use("/api/posts", postRoute);
 app.use("/api/comments", commentRoute);
 app.use("/api/notifications", notificationRoute);
 app.use("/api/likes", likeRoute);
+app.use("/api/feed", feedRoute);
 
 // Test route
 app.get("/", (req, res) => {

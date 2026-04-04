@@ -42,6 +42,11 @@ const UserSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    visibility: {
+      type: String,
+      enum: ["public", "private"],
+      default: "public",
+    },
   },
   { timestamps: true },
 );

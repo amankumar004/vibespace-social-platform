@@ -1,19 +1,4 @@
 const Post = require("./post.model");
-const User = require("../user/user.model");
-
-exports.getFeed = async (userId, page, limit) => {
-  const user = await User.findById(userId);
-
-  const posts = await Post.find({
-    userId: { $in: user.following },
-  })
-    .populate("userId", "username, avatar")
-    .sort({ createdAt: -1 })
-    .skip((page - 1) * limit)
-    .limit(limit);
-
-  return posts;
-};
 
 exports.createPost = async (userId, type, content, mediaUrl, mood) => {
   // Validate post type and content
@@ -38,8 +23,10 @@ exports.createPost = async (userId, type, content, mediaUrl, mood) => {
 };
 
 exports.getPostById = async (postId) => {
-  const post = await Post.findById(postId)
-    .populate("userId", "username avatar email");
+  const post = await Post.findById(postId).populate(
+    "userId",
+    "username avatar email",
+  );
 
   if (!post) {
     throw new Error("Post not found");
@@ -109,4 +96,3 @@ exports.deletePost = async (postId, userId) => {
 
   return { message: "Post deleted successfully" };
 };
-

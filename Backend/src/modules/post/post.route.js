@@ -7,7 +7,6 @@ const {
   getAllPosts,
   updatePost,
   deletePost,
-  getFeed,
 } = require("./post.controller");
 const { protect } = require("../../common/middlewares/authMiddleware");
 const upload = require("../../common/middlewares/uploadMiddleware");
@@ -16,9 +15,6 @@ const upload = require("../../common/middlewares/uploadMiddleware");
 router.post("/", protect, upload.single("image"), createPost); // Create post
 router.get("/", getAllPosts); // Get all posts (public feed)
 router.get("/user/:userId", getUserPosts); // Get user's posts
-
-// Feed
-router.get("/feed", protect, getFeed);
 
 router.get("/:id", getPostById); // Get post by ID
 

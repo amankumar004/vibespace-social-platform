@@ -43,7 +43,9 @@ const likePost = async (req, res) => {
 // Unlike post
 const unlikePost = async (req, res) => {
   try {
-    const result = await likeService.unlikePost(req.params.id, req.user._id);
+    const postId = req.params.id;
+    const userId = req.user._id;
+    const result = await likeService.unlikePost(postId, userId);
 
     return res.status(200).json({
       success: true,

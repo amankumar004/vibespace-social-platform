@@ -1,6 +1,33 @@
 import { Heart, MessageCircle, Share2 } from "lucide-react";
+import { useState } from "react";
+import { LikePost, UnlikePost } from "../../services/postActionsService";
 
 const PostCard = ({ post }) => {
+  const [isLiked, setIsLiked] = useState(!!post.isLiked);
+  const [likesCount, setLikesCount] = useState(post.likesCount || 0);
+
+  const toggleLike = async () => {
+    const prevLiked = isLiked;
+    const prevCount = likesCount;
+
+    // optimistic UI
+    setIsLiked(!prevLiked);
+    setLikesCount(prevLiked ? Math.max(0, prevCount - 1) : prevCount + 1);
+
+    try {
+      if (!prevLiked) {
+        await LikePost({ postId: post._id || post.id });
+      } else {
+        await UnlikePost({ postId: post._id || post.id });
+      }
+    } catch (err) {
+      // rollback on error
+      setIsLiked(prevLiked);
+      setLikesCount(prevCount);
+      console.error("Like toggle failed", err);
+    }
+  };
+
   return (
     <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4">
       {/* User */}
@@ -34,9 +61,16 @@ const PostCard = ({ post }) => {
       {/* Actions */}
       <div className="flex justify-between text-gray-400 text-sm">
         <div className="flex gap-4">
-          <span className="flex items-center gap-1 cursor-pointer hover:text-purple-400">
-            <Heart size={18} /> {post.likesCount}
-          </span>
+          <button
+            onClick={toggleLike}
+            className={`flex items-center gap-1 focus:outline-none transition-colors ${
+              isLiked ? "text-pink-500" : "hover:text-purple-400"
+            }`}
+            aria-pressed={isLiked}
+          >
+            <Heart size={18} fill={isLiked ? "currentColor" : "none"} />{" "}
+            {likesCount}
+          </button>
 
           <span className="flex items-center gap-1 cursor-pointer hover:text-purple-400">
             <MessageCircle size={18} /> {post.commentsCount}

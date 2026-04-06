@@ -1,6 +1,7 @@
 import { Heart, MessageCircle, Share2 } from "lucide-react";
 import { useState } from "react";
 import { LikePost, UnlikePost } from "../../services/postActionsService";
+import CommentsSection from "./CommentsSection";
 
 const PostCard = ({ post }) => {
   const [isLiked, setIsLiked] = useState(!!post.isLiked);
@@ -81,6 +82,9 @@ const PostCard = ({ post }) => {
           <Share2 size={18} />
         </span>
       </div>
+
+      {/* Comments */}
+      <CommentsSection postId={post._id || post.id} commentsCount={post.commentsCount} />
     </div>
   );
 };
